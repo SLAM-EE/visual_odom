@@ -27,8 +27,7 @@
 using namespace std;
 
 int main(int argc, char **argv)
-{
-
+{    
     // -----------------------------------------
     // Load images and calibration parameters
     // -----------------------------------------

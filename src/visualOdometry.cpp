@@ -180,14 +180,35 @@ void trackingFrame2Frame(cv::Mat& projMatrl, cv::Mat& projMatrr,
       std::vector<int> inliers;
       cv::cuda::solvePnPRansac(points3D_t0.t(), cv::Mat(1, (int)pointsLeft_t1.size(), CV_32FC2, &pointsLeft_t1[0]),
                             intrinsic_matrix, cv::Mat(1, 8, CV_32F, cv::Scalar::all(0)),
-                            rvec, translation, false, 200, 0.5, 20, &inliers);
+                            rvec, translation, false, 100, 0.5, 20, &inliers);
+      #endif
+      #if 0
+      cv::Mat inliers;
+      solve_pnp_custom(points3D_t0, pointsLeft_t1, intrinsic_matrix, distCoeffs, rvec, translation,
+                          useExtrinsicGuess, iterationsCount, reprojectionError, confidence,
+                          inliers, flags);
       #endif
       if (!mono_rotation)
       {
         cv::Rodrigues(rvec, rotation);
       }
 
+      #if 0
+      // -- Dataset for testing custom solve pnp ransac function ------
       std::cout << "[trackingFrame2Frame] inliers size: " << inliers.size() << std::endl;
+      char fileName[1024];
+      static int count = 0;
+      snprintf (fileName, sizeof (fileName), "dataset/linear_solver_dataset_%d.yml", count);
+      cv::FileStorage fsl (fileName, cv::FileStorage::WRITE);
+      fsl << "points3D_t0" << points3D_t0;
+      Mat pointsLeft_t1_mat;
+      vec_to_mat(pointsLeft_t1_mat,pointsLeft_t1);
+      fsl << "pointsLeft_t1" << pointsLeft_t1_mat;
+      fsl << "intrinsic_matrix" << intrinsic_matrix;
+      fsl << "rotation" << rotation;
+      fsl << "translation" << translation;
+      count++;
+      #endif
 
 }
 

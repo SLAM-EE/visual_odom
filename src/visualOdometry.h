@@ -22,8 +22,6 @@
 #include "utils.h"
 #include "Frame.h"
 
-
-
 void matchingFeatures(cv::Mat& imageLeft_t0, cv::Mat& imageRight_t0,
                       cv::Mat& imageLeft_t1, cv::Mat& imageRight_t1, 
                       FeatureSet& currentVOFeatures,
@@ -44,5 +42,18 @@ void trackingFrame2Frame(cv::Mat& projMatrl, cv::Mat& projMatrr,
 void displayTracking(cv::Mat& imageLeft_t1, 
                      std::vector<cv::Point2f>&  pointsLeft_t0,
                      std::vector<cv::Point2f>&  pointsLeft_t1);
+
+int solve_pnp_custom(cv::Mat& _opoints, std::vector<cv::Point2f>& _ipoints,
+                    cv::Mat& _cameraMatrix, cv::Mat& _distCoeffs,
+                    cv::Mat& _rvec, cv::Mat& _tvec, bool useExtrinsicGuess,
+                    int iterationsCount, float reprojectionError, double confidence,
+                    cv::Mat& _inliers, int flags);
+
+void vec_to_mat(cv::Mat& h_mat, std::vector<cv::Point2f>& vec)
+{
+    cv::Mat mat(vec.size(), 1, CV_32FC2, (void*)&vec[0]);
+    h_mat = mat.clone();
+}
+
 
 #endif

@@ -1,10 +1,10 @@
 
-find_package( OpenCV REQUIRED )
+find_package( OpenCV 4.2.0 EXACT REQUIRED PATHS /home/ubuntu/opencv/build/)
 
 
 add_subdirectory(evaluate)
 
-include_directories(${OpenCV_INCLUDE_DIRS} )
+include_directories(${OpenCV_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS}  )
 include_directories(evaluate)
 
 find_package(CUDA  REQUIRED)
@@ -34,7 +34,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 message(${PROJECT_SOURCE_DIR})
 
 cuda_add_executable( cuda_test cuda_test.cu )
-cuda_add_executable( run main.cpp solve_pnp_custom.cu )
+add_executable( run main.cpp )
 target_link_libraries( bucket ${OpenCV_LIBS} )
 target_link_libraries( feature ${OpenCV_LIBS} bucket)
 target_link_libraries( utils evaluate_odometry feature ${OpenCV_LIBS} )
@@ -42,4 +42,4 @@ target_link_libraries( visualOdometry utils bucket feature ${OpenCV_LIBS})
 
 
 target_link_libraries( Frame ${OpenCV_LIBS} )
-target_link_libraries( run ${OpenCV_LIBS} bucket feature utils visualOdometry Frame rgbd_standalone )
+target_link_libraries( run ${OpenCV_LIBS} bucket feature utils visualOdometry Frame rgbd_standalone ${catkin_LIBRARIES} )

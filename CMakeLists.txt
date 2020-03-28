@@ -6,5 +6,5 @@ project(VisualOdometry)
 # find_package (Eigen3 REQUIRED NO_MODULE)
 # include_directories (${EIGEN3_INCLUDE_DIR})
 # message(STATUS "EIGENPATH: " ${EIGEN3_INCLUDE_DIR})
-
+catkin_package()
 add_subdirectory(src)

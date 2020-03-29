@@ -26,6 +26,8 @@
 
 using namespace std;
 
+void publish_pose (cv::Mat frame_pose);
+
 int main(int argc, char **argv)
 {    
     // -----------------------------------------
@@ -203,6 +205,9 @@ int main(int argc, char **argv)
 
             std::cout << "Too large rotation"  << std::endl;
         }
+
+        publish_pose(frame_pose);
+        
         t_b = clock();
         float frame_time = 1000*(double)(t_b-t_a)/CLOCKS_PER_SEC;
         float fps = 1000/frame_time;

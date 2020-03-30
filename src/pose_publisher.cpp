@@ -10,6 +10,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/Pose2D.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Path.h>
 #include <opencv2/core/core.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -98,8 +99,9 @@ void publish_pose (cv::Mat frame_pose) {
 
 	static int setup_done = 0;
     static ros::NodeHandle *n = NULL;
-    static ros::Publisher *pPublisherObject = NULL;
+    static ros::Publisher *pPublisherObject = NULL, *pPublisherObject2 = NULL ;
     static geometry_msgs::PoseStamped stereo_pose;
+    static nav_msgs::Path stereo_path;
 
     if (0 == setup_done) {
         setup_done = 1;
@@ -112,14 +114,21 @@ void publish_pose (cv::Mat frame_pose) {
 
 		pPublisherObject = new ros::Publisher;
 		*pPublisherObject = n->advertise<geometry_msgs::PoseStamped> ("/stereo_pose", 10);
+		pPublisherObject2 = new ros::Publisher;
+		*pPublisherObject2 = n->advertise<nav_msgs::Path> ("/stereo_path", 10);
         stereo_pose.header.frame_id = "/pose";
+	stereo_path.header.frame_id = "/pose";
     }
 
     stereo_pose.pose.position.x = frame_pose.at<double>(0,3);
-    stereo_pose.pose.position.y = frame_pose.at<double>(1,3);
-    stereo_pose.pose.position.z = frame_pose.at<double>(2,3);
+    stereo_pose.pose.position.y = frame_pose.at<double>(2,3);
+    stereo_pose.pose.position.z = frame_pose.at<double>(1,3);
     stereo_pose.pose.orientation = CalculateRotation(frame_pose);
+    
+    stereo_path.poses.push_back(stereo_pose);
+
     pPublisherObject->publish(stereo_pose);
+    pPublisherObject2->publish(stereo_path);
 
     return;
 }

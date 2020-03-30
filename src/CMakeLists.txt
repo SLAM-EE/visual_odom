@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   message_generation
+  nav_msgs
 
 )
 
@@ -44,7 +45,7 @@ message(${PROJECT_SOURCE_DIR})
 
 cuda_add_executable( cuda_test cuda_test.cu )
 add_executable( run main.cpp pose_publisher.cpp)
-add_dependencies(run geometry_msgs)
+add_dependencies(run geometry_msgs nav_msgs)
 target_link_libraries( bucket ${OpenCV_LIBS} )
 target_link_libraries( feature ${OpenCV_LIBS} bucket)
 target_link_libraries( utils evaluate_odometry feature ${OpenCV_LIBS} )

@@ -29,6 +29,21 @@ cmake ..
 make -j4
 ./run /PathToKITTI/sequences/00/ ../calibration/kitti00.yaml
 ```
+
+### GPU CUDA acceleration
+The most time consumtion function circularMatching() can be accelerated using CUDA and greately improve the performance.  
+To enable GPU acceleration
+1. Make sure you have CUDA compatible GPU.
+2. Install CUDA, compile and install CUDA supported OpenCV 
+3. When compiling, use 
+```bash
+cmake .. -DUSE_CUDA=on
+```
+4. Compile & Run
+
+### ROS Integration
+The ros_cuda branch has ros integration which publishes the final pose as geometry_msgs::PoseStamped and path as nav_msgs::Path .
+
 ### Reference code
 1. [Monocular visual odometry algorithm](https://github.com/avisingh599/mono-vo/blob/master/README.md)
 

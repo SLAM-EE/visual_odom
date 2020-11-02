@@ -31,7 +31,7 @@ make -j4
 ```
 
 ### GPU CUDA acceleration
-Thanks to [temburuyk](https://github.com/ZhenghaoFei/visual_odom/commits?author=temburuyk), the most time consumtion function circularMatching() can be accelerated using CUDA and greately improve the performance.  
+The most time consumtion function circularMatching() can be accelerated using CUDA and greately improve the performance.  
 To enable GPU acceleration
 1. Make sure you have CUDA compatible GPU.
 2. Install CUDA, compile and install CUDA supported OpenCV 

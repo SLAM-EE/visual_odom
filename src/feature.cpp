@@ -36,6 +36,27 @@ void deleteUnmatchFeatures(std::vector<cv::Point2f>& points0, std::vector<cv::Po
      }
 }
 
+#if gpu_build
+void featureDetectionFast_gpu(cv::Mat image, std::vector<cv::Point2f>& points)  
+{
+  std::vector<cv::KeyPoint> keypoints;
+
+  cv::cuda::GpuMat image_gpu(image);
+  cv::cuda::GpuMat keypoints_gpu(keypoints);
+
+  int fast_threshold = 20;
+  bool nonmaxSuppression = true;
+
+  cv::Ptr<cv::cuda::FastFeatureDetector> d_fast = cv::cuda::FastFeatureDetector::create(fast_threshold, nonmaxSuppression);
+
+  d_fast->detect(image_gpu, keypoints_gpu);
+
+  download(keypoints_gpu, keypoints);
+
+  cv::KeyPoint::convert(keypoints, points, std::vector<int>());
+}
+#endif
+
 void featureDetectionFast(cv::Mat image, std::vector<cv::Point2f>& points)  
 {   
 //uses FAST as for feature dection, modify parameters as necessary
@@ -255,7 +276,13 @@ void bucketingFeatures(cv::Mat& image, FeatureSet& current_features, int bucket_
 void appendNewFeatures(cv::Mat& image, FeatureSet& current_features)
 {
     std::vector<cv::Point2f>  points_new;
-    featureDetectionFast(image, points_new);
+
+	#if gpu_build
+    	featureDetectionFast_gpu(image, points_new);
+    #else
+	    featureDetectionFast(image, points_new);
+    #endif
+
     current_features.points.insert(current_features.points.end(), points_new.begin(), points_new.end());
     std::vector<int>  ages_new(points_new.size(), 0);
     current_features.ages.insert(current_features.ages.end(), ages_new.begin(), ages_new.end());

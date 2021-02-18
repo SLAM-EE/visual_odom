@@ -14,6 +14,7 @@
 #include <opencv2/cudaimgproc.hpp>
 #include <opencv2/cudaarithm.hpp>
 #include <opencv2/cudalegacy.hpp>
+#include <opencv2/cudafeatures2d.hpp>
 #endif
 
 #include <iostream>
@@ -48,6 +49,10 @@ struct FeatureSet {
 void deleteUnmatchFeatures(std::vector<cv::Point2f>& points0, std::vector<cv::Point2f>& points1, std::vector<uchar>& status);
 
 void featureDetectionFast(cv::Mat image, std::vector<cv::Point2f>& points);
+
+#if gpu_build
+void featureDetectionFast(cv::Mat image, std::vector<cv::Point2f>& points);
+#endif
 
 void featureDetectionGoodFeaturesToTrack(cv::Mat image, std::vector<cv::Point2f>& points);
 
